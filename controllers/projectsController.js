@@ -20,7 +20,7 @@ exports.createProject = async (req, res) => {
     // Save project
     await project.save();
 
-    res.status(200).json({
+    res.status(201).json({
       msg: "Proyecto creado correctamente",
       project,
     });

@@ -11,6 +11,7 @@ app.use(express.json({ extended: true }));
 app.use("/api/users", require("./routes/usersRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/projects", require("./routes/projectsRoutes"));
+app.use("/api/tasks", require("./routes/tasksRoutes"));
 
 // Connect DB
 connectDB(() => {
