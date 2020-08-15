@@ -3,6 +3,7 @@ const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
+// Create user
 exports.addUser = async (req, res) => {
   //Check if there are not errors
   const errors = validationResult(req);
@@ -50,7 +51,6 @@ exports.addUser = async (req, res) => {
         res.status(201).json({
           msg: "Usuario creado correctamente",
           token,
-          user,
         });
       }
     );

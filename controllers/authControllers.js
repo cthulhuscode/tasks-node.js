@@ -3,13 +3,17 @@ const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
+// Login
 exports.authenticateUser = async (req, res) => {
   //Check if there are not errors
   const errors = validationResult(req);
   if (!errors.isEmpty())
     return res
       .status(400)
-      .json({ msg: "Error al crear usuario", errors: errors.array() });
+      .json({
+        msg: "Todos los campos son obligatorios",
+        errors: errors.array(),
+      });
 
   // Extract email and password
   const { email, password } = req.body;
@@ -49,6 +53,17 @@ exports.authenticateUser = async (req, res) => {
         });
       }
     );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
+
+// Get data from the auth user
+exports.getAuthUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(200).json({ user });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: "Error en el servidor" });
