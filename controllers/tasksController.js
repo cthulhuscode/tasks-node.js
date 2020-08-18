@@ -40,7 +40,7 @@ exports.createTask = async (req, res) => {
 exports.getTasksByProject = async (req, res) => {
   try {
     // Extract project and check existence
-    const projectId = req.body.project;
+    const projectId = req.query.project;
     const project = await Project.findById(projectId);
     if (!project) {
       return res.status(404).json({ msg: "Proyecto no encontrado" });
@@ -52,7 +52,7 @@ exports.getTasksByProject = async (req, res) => {
     }
 
     // Get tasks by project
-    const tasks = await Task.find({ project });
+    const tasks = await Task.find({ project }).sort({ createdAt: -1 });
     res.status(200).json({ msg: "Tareas encontradas", tasks });
   } catch (error) {
     console.log(error);
@@ -86,11 +86,9 @@ exports.updateTask = async (req, res) => {
       { _id: taskId },
       editingTask,
       { new: true },
-      (err, updatedTask) => {
+      (err, task) => {
         if (!err)
-          res
-            .status(200)
-            .json({ msg: "Tarea editada correctamente", updatedTask });
+          res.status(200).json({ msg: "Tarea editada correctamente", task });
       }
     );
   } catch (error) {

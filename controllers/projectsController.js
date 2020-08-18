@@ -1,4 +1,5 @@
 const Project = require("../models/Project");
+const Task = require("../models/Task");
 const { validationResult } = require("express-validator");
 
 // Create project
@@ -136,11 +137,16 @@ exports.deleteProject = async (req, res) => {
     }
 
     // Delete project
-    await Project.findOneAndRemove({ _id: id }, (err) => {
+    await Project.findOneAndRemove({ _id: id }, async (err) => {
       if (err) {
-        console.log(error);
+        console.log(err);
         return res.status(500).json({ msg: "Error al eliminar" });
-      } else res.status(200).json({ msg: "Proyecto eliminado" });
+      }
+
+      // Delete tasks from the project deleted
+      await Task.deleteMany({ project: id });
+
+      res.status(200).json({ msg: "Proyecto eliminado" });
     });
   } catch (error) {
     console.log(error);
